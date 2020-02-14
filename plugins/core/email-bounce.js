@@ -7,7 +7,7 @@ module.exports.title = 'Email Bounce Notification';
 module.exports.init = function(app, done) {
     // generate a multipart/report DSN failure response
     function generateBounceMessage(bounce) {
-        console.log('--- email-bounce generateBounceMessage ---');
+        console.log('--- email-bounce generateBounceMessage --- start');
         let headers = bounce.headers;
         let messageId = headers.getFirst('Message-ID');
 
@@ -15,7 +15,8 @@ module.exports.init = function(app, done) {
         if (!cfg || cfg.disabled) {
             cfg = {};
         }
-
+        console.log('--- email-bounce generateBounceMessage --- cfg:', cfg);
+        console.log('--- email-bounce generateBounceMessage --- app.config:', app.config);
         let from = cfg.mailerDaemon || app.config.mailerDaemon;
         let to = bounce.from;
         let sendingZone = cfg.sendingZone || app.config.sendingZone;
@@ -116,12 +117,13 @@ Status: 5.0.0
         };
 
         let mail = generateBounceMessage(bounce);
-
+        console.log('-------------------------------bounce mail:', mail);
         app.getQueue().generateId((err, id) => {
             if (err) {
                 return next(err);
             }
             envelope.id = id;
+            console.log('-------------------------------bounce envelope:', envelope);
 
             maildrop.add(envelope, mail.createReadStream(), err => {
                 if (err && err.name !== 'SMTPResponse') {
