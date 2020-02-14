@@ -7,6 +7,7 @@ module.exports.title = 'Email Bounce Notification';
 module.exports.init = function(app, done) {
     // generate a multipart/report DSN failure response
     function generateBounceMessage(bounce) {
+        console.log('--- email-bounce generateBounceMessage ---');
         let headers = bounce.headers;
         let messageId = headers.getFirst('Message-ID');
 
@@ -126,10 +127,11 @@ Status: 5.0.0
                 if (err && err.name !== 'SMTPResponse') {
                     app.logger.error('Bounce', err.message);
                 }
+                console.log('--- email-bounce queue:bounce --- maildrop add called');
                 next();
             });
         });
     });
-
+    console.log('--- email-bounce plugin initialized ---');
     done();
 };
