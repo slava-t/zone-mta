@@ -117,7 +117,7 @@ Status: 5.0.0
         };
 
         let mail = generateBounceMessage(bounce);
-        console.log('-------------------------------bounce mail:', mail);
+        console.log('-------------------------------bounce mail0:', mail);
         app.getQueue().generateId((err, id) => {
             if (err) {
                 return next(err);
